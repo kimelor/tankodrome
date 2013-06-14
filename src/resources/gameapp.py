@@ -9,6 +9,7 @@ import CONSTANTS
 
 # - Game app constants
 SCREEN_SIZE = 800, 600
+SCREEN_FLAGS = 0
 SCREEN_TITLE = 'Tankor 0.1 dev'
 FPS = 60
 
@@ -19,7 +20,9 @@ class GameApp(object):
         pygame.init()
         ## Screen init
         self._screen = pygame.display.set_mode(kwargs.get('screen_size',
-                                                          SCREEN_SIZE))
+                                                          SCREEN_SIZE),
+                                               kwargs.get('screen_flags',
+                                                          SCREEN_FLAGS))
         pygame.display.set_caption(kwargs.get('screen_title',
                                               SCREEN_TITLE))
         self._mouse = {'pos': (0, 0),
@@ -73,6 +76,9 @@ class GameApp(object):
                     pass    # Otras opciones a agregar, son, al abandonar el mouse
                 elif event.key == K_ESCAPE:
                     self._exit = True
+            elif event.type == VIDEORESIZE:
+                print event
+                pass
         # update input
         self._mouse['pos'] = pygame.mouse.get_pos()
         self._mouse['pressed'] = pygame.mouse.get_pressed()
@@ -182,7 +188,9 @@ def main():
     start_screen = ScreenManager(gadget, gadget1)
     game = GameApp(screen_size=(800, 600),
                    screen_title='Tankodrome',
+                   screen_flags=RESIZABLE,
                    control=start_screen)
+    return bool(game)
 
 if __name__ == '__main__':
     """ Execution """
